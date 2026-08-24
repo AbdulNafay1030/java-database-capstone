@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Search Doctors</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fa;
+            color: #333;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar - Patient Theme (Purple) */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #662d8c 0%, #ed1e79 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 50px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #662d8c;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+        }
+
+        /* Card */
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            max-width: 800px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-bar input:focus {
+            border-color: #ed1e79;
+            box-shadow: 0 0 5px rgba(237, 30, 121, 0.2);
+        }
+
+        .btn {
+            background: #ed1e79;
+            color: #fff;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #d81566;
+            transform: translateY(-2px);
+        }
+
+        /* Search Results */
+        .result-card {
+            display: none; /* hidden until search */
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .result-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-color: #fecfef;
+        }
+
+        .doc-info h4 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .doc-info p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .book-btn {
+            background: #662d8c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .book-btn:hover {
+            background: #502170;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Smart Clinic</h2>
+        <div class="nav-item">Dashboard</div>
+        <div class="nav-item active">Search Doctors</div>
+        <div class="nav-item">My Appointments</div>
+        <div class="nav-item">Medical Records</div>
+        <div class="nav-item" style="margin-top: auto;">Logout</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Find a Doctor</h1>
+            <div class="user-profile">
+                <span>Jane Patient</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by doctor name (e.g., Dr. Smith) or specialty..." value="Dr. Smith">
+                <button class="btn" onclick="performSearch()">Search</button>
+            </div>
+
+            <div id="resultsArea" style="display: none;">
+                <h3 style="margin-bottom: 20px; color: #662d8c;">Search Results</h3>
+                
+                <div class="result-card" style="display: flex;">
+                    <div class="doc-info">
+                        <h4>Dr. John Smith</h4>
+                        <p><strong>Specialty:</strong> Cardiologist</p>
+                        <p><strong>Email:</strong> dr.smith@smartclinic.com</p>
+                    </div>
+                    <button class="book-btn">Book Appointment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate search for screenshot purposes
+        function performSearch() {
+            document.getElementById('resultsArea').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
